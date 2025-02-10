@@ -47,3 +47,17 @@ def iniciar_trayecto():
             print("⚠️ Opción no válida. Inténtalo de nuevo.")
 
 
+def main():
+    """Función principal del programa."""
+    mostrar_bienvenida()
+
+    while True:
+        iniciar_trayecto()
+        reiniciar = input("¿Deseas iniciar otro trayecto? (s/n): ").strip().lower()
+        if reiniciar != "s":
+            print("\n👋 Gracias por usar el Taxímetro Digital. ¡Hasta la próxima!\n")
+            break
+
+
+if __name__ == "__main__":
+    main()
