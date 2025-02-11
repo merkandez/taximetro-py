@@ -1,6 +1,4 @@
 
-
-```markdown
 # 🏗 1. Estructura del Código
 
 En este proyecto de taxímetro básico, hemos organizado el código en funciones para que sea modular, fácil de leer y reutilizable. Aquí están las principales secciones:
@@ -201,6 +199,3 @@ if __name__ == "__main__":
 ✔ **f-strings** → Formatean cadenas de manera clara y eficiente.  
 ✔ **Buena Práctica: `if __name__ == "__main__"`** → Define el punto de entrada del script.
 ```
-
----
-Respuesta de Perplexity: pplx.ai/share
