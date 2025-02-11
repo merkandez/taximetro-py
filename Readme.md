@@ -1,177 +1,166 @@
-# Calculadora en Python
+🏗 1. Estructura del Código
+En este proyecto de taxímetro básico, hemos organizado el código en funciones para que sea modular, fácil de leer y reutilizable. Aquí están las principales secciones:
 
-## Índice
+1️⃣ mostrar_bienvenida() → Muestra un mensaje de introducción.
+2️⃣ iniciar_trayecto() → Maneja la lógica de un trayecto (inicio, cálculo de tarifa y finalización).
+3️⃣ main() → Función principal que gestiona el flujo del programa.
+4️⃣ if __name__ == "__main__": → Punto de entrada del script.
 
-- [Acerca del proyecto](#acerca-del-proyecto)
-  - [Estado del proyecto](#estado-del-proyecto)
-  - [Mis herramientas](#mis-herramientas)
-- [Empecemos](#empecemos)
-  - [Checklist](#checklist)
-  - [Mi paso a paso](#mi-paso-a-paso)
-- [Pongámoslo a prueba](#pongamoslo-a-prueba)
-- [Roadmap](#roadmap)
+Ahora vamos a analizar cada parte en detalle. 🔍
 
----
+📌 2. Función mostrar_bienvenida()
+python
+Copiar
+Editar
+def mostrar_bienvenida():
+    """Muestra un mensaje de bienvenida y explica el funcionamiento del taxímetro."""
+    print("\n🚖 Bienvenido al Taxímetro Digital 🚖")
+    print("Este programa calcula la tarifa de un trayecto en función del tiempo.")
+    print("🔹 2 céntimos por segundo cuando está detenido.")
+    print("🔹 5 céntimos por segundo cuando está en movimiento.")
+    print("¡Comencemos!\n")
+🔎 Conceptos Claves
+✅ Definición de una función
 
-<details>
-  <summary>¿Qué voy a encontrarme?</summary>
-  <ol>
-    <li>
-      <a href="#acerca-del-proyecto">Acerca del proyecto</a>
-      <ul>
-        <li><a href="#estado-del-proyecto">Estado del proyecto</a></li>
-        <li><a href="#mis-herramientas">Mis herramientas</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#empecemos">Empecemos</a>
-      <ul>
-        <li><a href="#checklist">Checklist</a></li>
-        <li><a href="#mi-paso-a-paso">Mi paso a paso</a></li>
-      </ul>
-    </li>
-    <li><a href="#pongamoslo-a-prueba">Pongámoslo a prueba</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-  </ol>
-</details>
+Se usa def nombre_funcion(): para definir una función en Python.
+"mostrar_bienvenida" es un nombre descriptivo que indica claramente su propósito.
+✅ Cadenas de texto (str) y print()
 
----
+print() muestra información en la terminal.
+\n (salto de línea) ayuda a mejorar la presentación visual.
+✅ Docstrings ("""Comentario""")
 
-## Acerca del proyecto
+Son comentarios de varias líneas que explican qué hace la función.
+Se usan """ """ y se colocan justo debajo de la definición de la función.
+📌 3. Función iniciar_trayecto()
+Esta es la parte más importante del código, ya que maneja la lógica del taxímetro. Vamos a desglosarla paso a paso.
 
-### 🌟 Descripción
+🔹 Declaración de la Función y Variables Iniciales
+python
+Copiar
+Editar
+def iniciar_trayecto():
+    """Inicia un trayecto y permite al usuario ingresar manualmente el tiempo transcurrido."""
+    total = 0
+    en_movimiento = False
+    print("Trayecto iniciado. Escribe 'm' para moverte, 'p' para parar, 'f' para finalizar.")
+✅ Variables Globales de la Función
 
-Esta es una calculadora en Python que permite realizar operaciones matemáticas básicas: **suma, resta, multiplicación y división**.
+total = 0 → Acumula el costo del trayecto.
+en_movimiento = False → Indica si el taxi está en movimiento o detenido.
+🔹 Bucle while True para Mantener el Programa Activo
+python
+Copiar
+Editar
+while True:
+    accion = input("🚗 Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): ").strip().lower()
+✅ Bucle Infinito (while True)
 
-El usuario ingresa dos números y elige la operación deseada a través de un menú en consola. Se validan los datos de entrada para evitar errores y, en caso de intentar dividir por 0, el programa muestra un mensaje de error.
+Mantiene el programa en ejecución hasta que el usuario decida finalizar.
+✅ input()
 
-El programa se ejecuta en un bucle hasta que el usuario decide salir.
+Permite al usuario ingresar comandos ('m', 'p', 'f').
+.strip().lower() → Limpia espacios en blanco y convierte a minúsculas para evitar errores por formato.
+🔹 Validación del Tiempo Ingresado
+python
+Copiar
+Editar
+if accion in ['m', 'p']:
+    try:
+        segundos = int(input("⏳ Ingresa el tiempo transcurrido en segundos: "))
+        if segundos < 0:
+            print("⚠️ El tiempo no puede ser negativo.")
+            continue
+    except ValueError:
+        print("⚠️ Debes ingresar un número entero válido.")
+        continue
+✅ Uso de if para Filtrar Opciones
 
-### Estado del proyecto
+Si el usuario escribe 'm' o 'p', el programa pide el tiempo transcurrido.
+✅ Manejo de Errores con try-except
 
-:construction: Proyecto en construcción :construction:
+int(input()) convierte el tiempo ingresado en número entero.
+Si el usuario escribe texto en lugar de un número, except ValueError: evita que el programa crasheé.
+✅ Validación de Datos
 
-### Mis herramientas
+if segundos < 0: → Evita tiempos negativos.
+continue → Vuelve a pedir los datos si hay un error.
+🔹 Cálculo de la Tarifa
+python
+Copiar
+Editar
+tarifa = 0.05 if accion == 'm' else 0.02
+total += segundos * tarifa
+en_movimiento = (accion == 'm')
 
-* [Python 3](https://www.python.org/)
-* [Documentación oficial de Python](https://docs.python.org/3/)
+estado = "en movimiento" if en_movimiento else "detenido"
+print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
+✅ Operador Ternario (if-else en una línea)
 
----
+python
+Copiar
+Editar
+tarifa = 0.05 if accion == 'm' else 0.02
+Si el taxi está en movimiento ('m'), la tarifa es 0.05.
+Si el taxi está detenido ('p'), la tarifa es 0.02.
+✅ Cálculo del Costo
 
-## Empecemos
+python
+Copiar
+Editar
+total += segundos * tarifa
+Multiplica el tiempo ingresado por la tarifa.
+Acumula el resultado en total.
+✅ Uso de f-strings
 
-### Checklist
+python
+Copiar
+Editar
+print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
+f"Texto {variable}" permite incluir variables dentro de una cadena.
+{total:.2f} → Formatea el número con dos decimales.
+🔹 Finalizar el Trayecto
+python
+Copiar
+Editar
+elif accion == 'f':
+    print(f"\n🔚 Trayecto finalizado. Tarifa total: {total:.2f}€\n")
+    break
+✅ Detener el Bucle con break
 
-- [X] Crear funciones para cada operación.
-- [X] Implementar menú interactivo en consola.
-- [X] Manejo de errores para entradas no válidas y división por cero.
-- [X] Crear un bucle que permita repetir las operaciones hasta que el usuario salga.
-- [ ] Agregar interfaz gráfica (Tkinter o Flask).
-- [ ] Ampliar operaciones (potencias, raíz cuadrada, etc.).
+Cuando el usuario ingresa 'f', el programa muestra el total y sale del bucle.
+📌 4. Función main()
+python
+Copiar
+Editar
+def main():
+    """Función principal del programa."""
+    mostrar_bienvenida()
 
-### Mi paso a paso
-
-> [!WARNING]
-> Todo lo escrito es en base a mi experiencia. Cada quien tiene su propio camino y tiempo. Espero que lo tomes como un complemento a tu formación y no como las sagradas escrituras.
-
-#### Estructura del código
-
-- Funciones separadas para cada operación.
-- Una función principal que gestiona el menú y las entradas del usuario.
-- Un bucle `while` que permite ejecutar el programa hasta que el usuario decida salir.
-
-**Ejemplo de código:**
-
-```python
-# Definición de operaciones
-
-def suma(a, b):
-    return a + b
-
-def resta(a, b):
-    return a - b
-
-def multiplicacion(a, b):
-    return a * b
-
-def division(a, b):
-    if b == 0:
-        return "Error: No se puede dividir por cero."
-    return a / b
-
-# Menú principal
-def calculadora():
     while True:
-        print("\nCalculadora en Python")
-        print("1. Sumar")
-        print("2. Restar")
-        print("3. Multiplicar")
-        print("4. Dividir")
-        print("5. Salir")
-        opcion = input("Elige una opción: ")
-
-        if opcion == '5':
-            print("Saliendo...")
+        iniciar_trayecto()
+        reiniciar = input("¿Deseas iniciar otro trayecto? (s/n): ").strip().lower()
+        if reiniciar != 's':
+            print("\n👋 Gracias por usar el Taxímetro Digital. ¡Hasta la próxima!\n")
             break
-        
-        num1 = float(input("Ingresa el primer número: "))
-        num2 = float(input("Ingresa el segundo número: "))
+✅ Maneja el Flujo del Programa
 
-        if opcion == '1':
-            print("Resultado:", suma(num1, num2))
-        elif opcion == '2':
-            print("Resultado:", resta(num1, num2))
-        elif opcion == '3':
-            print("Resultado:", multiplicacion(num1, num2))
-        elif opcion == '4':
-            print("Resultado:", division(num1, num2))
-        else:
-            print("Opción inválida. Intenta de nuevo.")
+Primero muestra la bienvenida.
+Luego entra en un bucle infinito, permitiendo iniciar nuevos trayectos.
+Si el usuario no quiere otro trayecto, el programa se cierra.
+📌 5. Punto de Entrada del Programa
+python
+Copiar
+Editar
+if __name__ == "__main__":
+    main()
+✅ Evita que el código se ejecute al importarlo en otro archivo.
+✅ Es una buena práctica para hacer código reutilizable en otros programas.
 
-# Ejecutar calculadora
-calculadora()
-```
-
----
-
-## Pongámoslo a prueba
-
-![](https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif)
-
----
-
-## Roadmap
-
-**Posibles mejoras:**
-
-- Agregar una interfaz gráfica con Tkinter o Flask.
-- Incluir soporte para operaciones avanzadas como potencias y raíces cuadradas.
-- Integrar una función de historial de operaciones realizadas.
-
-```mermaid
-graph TD;
-    A[Inicio] --> B[Mostrar menú];
-    B --> C{Elige operación};
-    C -->|Suma| D[Sumar números];
-    C -->|Resta| E[Restar números];
-    C -->|Multiplicación| F[Multiplicar números];
-    C -->|División| G[Dividir números];
-    C -->|Salir| H[Finalizar programa];
-```
-
----
-
-# 🎉 Good Luck!
-
-![](https://media.giphy.com/media/l3vR4E4aFA2l5Rtxe/giphy.gif)
-
----
-
-> Si te ha sido útil esta guía, regálame una ⭐.
-
-**Releases**
-No releases published
-
-**Packages**
-No packages published
-
+🎯 Resumen Final
+✔ Funciones → Organizan el código en bloques reutilizables.
+✔ Bucle while True → Mantiene el programa corriendo hasta que el usuario lo detenga.
+✔ if-elif → Toman decisiones basadas en la entrada del usuario.
+✔ try-except → Maneja errores de entrada para evitar fallos.
+✔ f-strings → Formatean cadenas de manera clara y eficiente.
+✔ Buena Práctica: if __name__ == "__main__" → Define el punto de entrada del script.
