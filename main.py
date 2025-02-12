@@ -57,4 +57,28 @@ def mostrar_historial():
         for i, total in enumerate(historial_trayectos, start=1):
             print(f"Trayecto {i}: {total:.2f} céntimos")
         print()
+def main():
+    """Función principal del programa."""
+    mostrar_bienvenida()
+    
+    while True:
+        print("\n📌 Menú Principal:")
+        print("1️⃣ Iniciar un nuevo trayecto")
+        print("2️⃣ Ver historial de trayectos")
+        print("3️⃣ Salir")
+        
+        opcion = input("Selecciona una opción (1, 2 o 3): ").strip()
+
+        if opcion == "1":
+            iniciar_trayecto()
+        elif opcion == "2":
+            mostrar_historial()
+        elif opcion == "3":
+            print("\n👋 Gracias por usar el Taxímetro Digital. ¡Hasta la próxima!\n")
+            break
+        else:
+            print("⚠️ Opción no válida. Inténtalo de nuevo.")
+
+if __name__ == "__main__":
+    main()
             
