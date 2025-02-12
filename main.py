@@ -17,6 +17,7 @@ def calcular_tarifa(segundos, en_movimiento):
     tarifa = TARIFA_MOVIMIENTO if en_movimiento else TARIFA_PARADO
     return segundos * tarifa
 
+
 def iniciar_trayecto():
     """Inicia un trayecto y permite al usuario ingresar manualmente el tiempo transcurrido."""
     total = 0
@@ -30,8 +31,21 @@ def iniciar_trayecto():
             try:
                 segundos = int(input("⌚ Ingresa el tiempo transcurrido en segundos: "))
                 if segundos < 0:
-                    print("⛔El tiempo no puede ser negativo.")
+                    print("⛔ El tiempo no puede ser negativo.")
                     continue
             except ValueError:
                 print("⛔ Debes ingresar un número entero válido.")
-                
+                continue
+
+            total += calcular_tarifa(segundos, en_movimiento)
+            en_movimiento (accion == 'm')
+            estado= "en movimiento" if en_movimiento else "detenido"
+            print(f"🚕 Trayecto en {estado}. Tarifa acumulada: {total:.2f} céntimos.")
+        elif accion == 'f':
+            print(f"\n🏁 Trayecto finalizado. Tarifa total: {total:.2f} céntimos.")
+            historial_trayectos.append(total)
+            break
+        else:
+            print("⛔ Debes escribir 'm' (moverse), 'p' (parar) o 'f' (finalizar).")
+
+            
