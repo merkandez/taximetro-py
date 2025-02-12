@@ -47,5 +47,14 @@ def iniciar_trayecto():
             break
         else:
             print("⛔ Debes escribir 'm' (moverse), 'p' (parar) o 'f' (finalizar).")
-
+def mostrar_historial():
+    """Muestra el historial de trayectos finalizados."""
+    print("\n📜 Historial de trayectos:")
+    if not historial_trayectos:
+        print("No hay trayectos registrados aún en el historial.")
+    else:
+        print("Historial de trayectos:")
+        for i, total in enumerate(historial_trayectos, start=1):
+            print(f"Trayecto {i}: {total:.2f} céntimos")
+        print()
             
