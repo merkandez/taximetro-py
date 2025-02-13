@@ -17,6 +17,13 @@ def calcular_tarifa(segundos, en_movimiento):
     tarifa = TARIFA_MOVIMIENTO if en_movimiento else TARIFA_PARADO
     return segundos * tarifa
 
+def formato_moneda(total):
+    """Formatea el total para mostrarlo en céntimos si es menor de 1 euro, o en euros si es 1 o más."""
+    if total < 1:
+        return f"{total * 100:.0f} céntimos"  # Multiplicamos por 100 y eliminamos decimales
+    else:
+        return f"{total:.2f}€"  # Muestra en formato euros con dos decimales
+
 
 def iniciar_trayecto():
     """Inicia un trayecto y permite al usuario ingresar manualmente el tiempo transcurrido."""
