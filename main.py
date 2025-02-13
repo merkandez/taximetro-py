@@ -47,9 +47,9 @@ def iniciar_trayecto():
             total += calcular_tarifa(segundos, en_movimiento)
             en_movimiento = (accion == 'm')
             estado = "en movimiento" if en_movimiento else "detenido"
-            print(f"🚕 Trayecto en {estado}. Tarifa acumulada: {total:.2f} céntimos.")
-        elif accion == 'f':
-            print(f"\n🏁 Trayecto finalizado. Tarifa total: {total:.2f} céntimos.")
+
+            print(f"🚕 Trayecto en {estado}. Tarifa acumulada: {formato_moneda(total)}.")
+            print(f"\n🏁 Trayecto finalizado. Tarifa total: {formato_moneda(total)}.")
             historial_trayectos.append(total)
             break
         else:
@@ -62,7 +62,7 @@ def mostrar_historial():
     else:
         print("Historial de trayectos:")
         for i, total in enumerate(historial_trayectos, start=1):
-            print(f"Trayecto {i}: {total:.2f} céntimos")
+            print(f"Trayecto {i}: {formato_moneda(total)}.")
         print()
 def main():
     """Función principal del programa."""
