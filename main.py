@@ -38,8 +38,8 @@ def iniciar_trayecto():
                 continue
 
             total += calcular_tarifa(segundos, en_movimiento)
-            en_movimiento (accion == 'm')
-            estado= "en movimiento" if en_movimiento else "detenido"
+            en_movimiento = (accion == 'm')
+            estado = "en movimiento" if en_movimiento else "detenido"
             print(f"🚕 Trayecto en {estado}. Tarifa acumulada: {total:.2f} céntimos.")
         elif accion == 'f':
             print(f"\n🏁 Trayecto finalizado. Tarifa total: {total:.2f} céntimos.")
