@@ -1,20 +1,53 @@
+# 🚖 Taxímetro Digital en Python
 
-# 🏗 1. Estructura del Código
+Este proyecto es una evolución didáctica de un taxímetro digital en Python. A lo largo de varias ramas, hemos ido agregando nuevas funcionalidades paso a paso para aprender conceptos clave del lenguaje.
 
-En este proyecto de taxímetro básico, hemos organizado el código en funciones para que sea modular, fácil de leer y reutilizable. Aquí están las principales secciones:
-
-1️⃣ `mostrar_bienvenida()` → Muestra un mensaje de introducción.  
-2️⃣ `iniciar_trayecto()` → Maneja la lógica de un trayecto (inicio, cálculo de tarifa y finalización).  
-3️⃣ `main()` → Función principal que gestiona el flujo del programa.  
-4️⃣ `if __name__ == "__main__":` → Punto de entrada del script.
-
-Ahora vamos a analizar cada parte en detalle. 🔍
+Esta `main` contiene la versión más básica del código, pero puedes explorar las versiones más avanzadas en diferentes ramas.
 
 ---
 
-## 📌 2. Función `mostrar_bienvenida()`
+## 🏗 1. Estructura del Proyecto
 
+Este proyecto está organizado en **múltiples ramas**, cada una representando una etapa de aprendizaje y evolución del código.
+
+| 🌱 **Versión**       | 📌 **Rama**                | 🔍 **Características**  |
+|----------------------|--------------------------|-------------------------|
+| **Taxímetro básico** | `main`                   | Cálculo manual de tarifas, sin almacenamiento ni automatización. |
+| **Automatización con `time`** | `feature-time-uv` | Se implementa `time` para medir el tiempo en movimiento y detenerse automáticamente. |
+| **Nivel intermedio** | `feature-nivel-medio`    | Logs, tests unitarios e historial de trayectos en un archivo de texto. |
+
+---
+
+## 📌 2. ¿Cómo Explorar la Evolución del Proyecto?
+
+Si has clonado este repositorio y quieres ver cómo evolucionó el código, puedes cambiar entre ramas con:
+
+```sh
+git checkout feature-time-uv  # Ir a la versión con time
+git checkout feature-nivel-medio  # Ir a la versión con logs, tests e historial
 ```
+
+Para ver todas las ramas disponibles:
+
+```sh
+git branch -a
+```
+
+---
+
+## 🛠 3. Código de la Versión `main`
+
+Esta versión es la más básica y permite calcular tarifas de taxi de manera manual.
+
+### 📌 Funciones Principales
+
+1️⃣ **`mostrar_bienvenida()`** → Muestra un mensaje explicativo.  
+2️⃣ **`iniciar_trayecto()`** → Calcula la tarifa de un trayecto según el tiempo ingresado.  
+3️⃣ **`main()`** → Controla el flujo del programa.  
+
+### 📜 Código de `main.py`
+
+```python
 def mostrar_bienvenida():
     """Muestra un mensaje de bienvenida y explica el funcionamiento del taxímetro."""
     print("\n🚖 Bienvenido al Taxímetro Digital 🚖")
@@ -22,140 +55,48 @@ def mostrar_bienvenida():
     print("🔹 2 céntimos por segundo cuando está detenido.")
     print("🔹 5 céntimos por segundo cuando está en movimiento.")
     print("¡Comencemos!\n")
-```
 
-### 🔎 Conceptos Claves
 
-- **✅ Definición de una función**  
-  Se usa `def nombre_funcion():` para definir una función en Python.  
-  `"mostrar_bienvenida"` es un nombre descriptivo que indica claramente su propósito.
-
-- **✅ Cadenas de texto (`str`) y `print()`**  
-  - `print()` muestra información en la terminal.  
-  - `\n` (salto de línea) ayuda a mejorar la presentación visual.
-
-- **✅ Docstrings (`"""Comentario"""`)**  
-  Son comentarios de varias líneas que explican qué hace la función.  
-  Se usan `""" """` y se colocan justo debajo de la definición de la función.
-
----
-
-## 📌 3. Función `iniciar_trayecto()`
-
-Esta es la parte más importante del código, ya que maneja la lógica del taxímetro. Vamos a desglosarla paso a paso.
-
-### 🔹 Declaración de la Función y Variables Iniciales
-
-```
 def iniciar_trayecto():
     """Inicia un trayecto y permite al usuario ingresar manualmente el tiempo transcurrido."""
     total = 0
     en_movimiento = False
-    print("Trayecto iniciado. Escribe 'm' para moverte, 'p' para parar, 'f' para finalizar.")
-```
+    print(
+        "Trayecto iniciado. Escribe 'm' para moverte, 'p' para parar, 'f' para finalizar."
+    )
 
-#### ✅ Variables Globales de la Función
+    while True:
+        accion = (
+            input("🚗 Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): ")
+            .strip()
+            .lower()
+        )
 
-- `total = 0` → Acumula el costo del trayecto.  
-- `en_movimiento = False` → Indica si el taxi está en movimiento o detenido.
+        if accion in ["m", "p"]:
+            try:
+                segundos = int(input("⏳ Ingresa el tiempo transcurrido en segundos: "))
+                if segundos < 0:
+                    print("⚠️ El tiempo no puede ser negativo.")
+                    continue
+            except ValueError:
+                print("⚠️ Debes ingresar un número entero válido.")
+                continue
 
----
+            tarifa = 0.05 if accion == "m" else 0.02
+            total += segundos * tarifa
+            en_movimiento = accion == "m"
 
-### 🔹 Bucle `while True` para Mantener el Programa Activo
+            estado = "en movimiento" if en_movimiento else "detenido"
+            print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
 
-```
-while True:
-    accion = input("🚗 Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): ").strip().lower()
-```
+        elif accion == "f":
+            print(f"\n🔚 Trayecto finalizado. Tarifa total: {total:.2f}€\n")
+            break
 
-#### ✅ Bucle Infinito (`while True`)  
-Mantiene el programa en ejecución hasta que el usuario decida finalizar.
+        else:
+            print("⚠️ Opción no válida. Inténtalo de nuevo.")
 
-#### ✅ `input()`  
-Permite al usuario ingresar comandos (`'m'`, `'p'`, `'f'`).  
-`.strip().lower()` → Limpia espacios en blanco y convierte a minúsculas para evitar errores por formato.
 
----
-
-### 🔹 Validación del Tiempo Ingresado
-
-```
-if accion in ['m', 'p']:
-    try:
-        segundos = int(input("⏳ Ingresa el tiempo transcurrido en segundos: "))
-        if segundos < 0:
-            print("⚠️ El tiempo no puede ser negativo.")
-            continue
-    except ValueError:
-        print("⚠️ Debes ingresar un número entero válido.")
-        continue
-```
-
-#### ✅ Uso de `if` para Filtrar Opciones  
-Si el usuario escribe `'m'` o `'p'`, el programa pide el tiempo transcurrido.
-
-#### ✅ Manejo de Errores con `try-except`  
-- `int(input())` convierte el tiempo ingresado en número entero.  
-- Si el usuario escribe texto en lugar de un número, `except ValueError:` evita que el programa crashee.
-
-#### ✅ Validación de Datos  
-- `if segundos < 0:` → Evita tiempos negativos.  
-- `continue` → Vuelve a pedir los datos si hay un error.
-
----
-
-### 🔹 Cálculo de la Tarifa
-
-```
-tarifa = 0.05 if accion == 'm' else 0.02
-total += segundos * tarifa
-en_movimiento = (accion == 'm')
-
-estado = "en movimiento" if en_movimiento else "detenido"
-print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
-```
-
-#### ✅ Operador Ternario (`if-else` en una línea)
-
-```
-tarifa = 0.05 if accion == 'm' else 0.02
-```
-- Si el taxi está en movimiento (`'m'`), la tarifa es **0.05**.
-- Si está detenido (`'p'`), la tarifa es **0.02**.
-
-#### ✅ Cálculo del Costo
-
-```
-total += segundos * tarifa
-```
-Multiplica el tiempo ingresado por la tarifa y acumula el resultado en `total`.
-
-#### ✅ Uso de f-strings
-
-```
-print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
-```
-- `f"Texto {variable}"` permite incluir variables dentro de una cadena.
-- `{total:.2f}` → Formatea el número con dos decimales.
-
----
-
-### 🔹 Finalizar el Trayecto
-
-```
-elif accion == 'f':
-    print(f"\n🔚 Trayecto finalizado. Tarifa total: {total:.2f}€\n")
-    break
-```
-
-#### ✅ Detener el Bucle con `break`
-Cuando el usuario ingresa `'f'`, el programa muestra el total y sale del bucle.
-
----
-
-## 📌 4. Función `main()`
-
-```
 def main():
     """Función principal del programa."""
     mostrar_bienvenida()
@@ -163,39 +104,61 @@ def main():
     while True:
         iniciar_trayecto()
         reiniciar = input("¿Deseas iniciar otro trayecto? (s/n): ").strip().lower()
-        if reiniciar != 's':
+        if reiniciar != "s":
             print("\n👋 Gracias por usar el Taxímetro Digital. ¡Hasta la próxima!\n")
             break
-```
 
-### ✅ Maneja el Flujo del Programa
 
-1. Primero muestra la bienvenida.
-2. Luego entra en un bucle infinito, permitiendo iniciar nuevos trayectos.
-3. Si el usuario no quiere otro trayecto, el programa se cierra.
-
----
-
-## 📌 5. Punto de Entrada del Programa
-
-```
 if __name__ == "__main__":
     main()
+
 ```
-
-### ✅ Buenas Prácticas
-
-- Evita que el código se ejecute al importarlo en otro archivo.
-- Es una buena práctica para hacer código reutilizable en otros programas.
 
 ---
 
-# 🎯 Resumen Final
+## 🎓 4. ¿Cómo Continuar con el Aprendizaje?
 
-✔ **Funciones** → Organizan el código en bloques reutilizables.  
-✔ **Bucle `while True`** → Mantiene el programa corriendo hasta que el usuario lo detenga.  
-✔ **if-elif** → Toman decisiones basadas en la entrada del usuario.  
-✔ **try-except** → Maneja errores de entrada para evitar fallos.  
-✔ **f-strings** → Formatean cadenas de manera clara y eficiente.  
-✔ **Buena Práctica: `if __name__ == "__main__"`** → Define el punto de entrada del script.
+Para seguir aprendiendo y entender cómo mejorar este código, revisa las siguientes ramas:
+
+1️⃣ `feature-time-uv` → **Automatización con `time`**  
+   - Se sustituye el ingreso manual de segundos por una medición automática del tiempo transcurrido.  
+   - Permite calcular la tarifa sin intervención del usuario.
+
+2️⃣ `feature-nivel-medio` → **Logs, tests e historial de trayectos**  
+   - Se registra información en un archivo de logs.  
+   - Se implementan tests unitarios para validar cálculos.  
+   - Se guarda el historial de trayectos en un archivo de texto.
+
+Puedes revisar cada rama con:
+
+```sh
+git checkout feature-time-uv
 ```
+
+Y ejecutar el código normalmente con:
+
+```sh
+python main.py
+```
+
+---
+
+## 🚀 5. Mejoras Futuras
+
+Este proyecto tiene mucho potencial de evolución. Algunas mejoras futuras podrían incluir:
+
+✅ **Configuración de tarifas dinámicas** → Ajustar precios en función de la demanda.  
+✅ **Interfaz gráfica (GUI)** → Hacerlo más visual e interactivo.  
+✅ **Integración con GPS** → Calcular distancias en lugar de depender solo del tiempo.  
+
+---
+
+## 💡 Conclusión
+
+Este proyecto es una guía didáctica para aprender Python de manera progresiva. Hemos estructurado el código en ramas para reflejar la evolución de un programa real, permitiendo explorar mejoras paso a paso.  
+
+🔹 **Empieza desde `main`, explora las ramas y mejora el código a tu propio ritmo.**  
+🔹 **Si tienes dudas, revisa el README de cada rama para entender los cambios.**  
+
+👨‍💻 ¡Feliz aprendizaje y programación! 🚀
+
