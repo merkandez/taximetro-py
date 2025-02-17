@@ -34,7 +34,7 @@ def guardar_historial():
     """Guarda el historial de trayectos en un archivo de texto."""
     with open(HISTORIAL_FILE, "w") as file:
         for total in historial_trayectos:
-            file.write(f"{total}\n")
+            file.write(f"{total}\n") #file.write(f"{round(total, 2):.2f}\n") para guardarlo solo con 2 decimales y redondeo
 
 
 def mostrar_bienvenida():
