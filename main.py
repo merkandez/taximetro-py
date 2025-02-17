@@ -1,20 +1,40 @@
-# 📌 Taxímetro Digital con Tiempo Automático en Python y funcionalidad de registro de logs
+# 📌 Taxímetro Digital con Tiempo Automático en Python y funcionalidad de registro de logs, tests e historial de trayectos
 
 import time
 import logging  # Importamos logging para registrar eventos en un archivo
+import os
 
 # Configuración del sistema de logs
 logging.basicConfig(
     filename="taximetro.log",  # Archivo donde se guardarán los logs
     level=logging.INFO,  # Nivel de registro: INFO (guarda eventos clave)
     format="%(asctime)s - %(message)s",  # Formato del mensaje de log
-   # filemode="w" # Esto hace que el archivo se sobrescriba en cada ejecución
+    # filemode="w" # Esto hace que el archivo se sobrescriba en cada ejecución
 )
+
+# Archivo donde se guardará el historial de trayectos
+HISTORIAL_FILE = "historial.txt"
+
 
 TARIFA_MOVIMIENTO = 0.05
 TARIFA_PARADO = 0.02
 
 historial_trayectos = []
+
+
+def cargar_historial():
+    """Carga el historial de trayectos desde un archivo de texto al iniciar el programa."""
+    if os.path.exists(HISTORIAL_FILE):
+        with open(HISTORIAL_FILE, "r") as file:
+            for linea in file:
+                historial_trayectos.append(float(linea.strip()))
+
+
+def guardar_historial():
+    """Guarda el historial de trayectos en un archivo de texto."""
+    with open(HISTORIAL_FILE, "w") as file:
+        for total in historial_trayectos:
+            file.write(f"{total}\n")
 
 
 def mostrar_bienvenida():
@@ -69,7 +89,9 @@ def iniciar_trayecto():
             en_movimiento = accion == "m"
             estado = "en movimiento" if en_movimiento else "detenido"
 
-            logging.info(f"➡️ Cambio de estado: {estado} ({segundos:.2f} segundos) - Tarifa acumulada: {total:.2f}€")
+            logging.info(
+                f"➡️ Cambio de estado: {estado} ({segundos:.2f} segundos) - Tarifa acumulada: {total:.2f}€"
+            )
             print(f"🚕 Trayecto {estado}. Tarifa acumulada: {formato_moneda(total)}.")
 
             tiempo_inicio = time.time()
@@ -78,6 +100,7 @@ def iniciar_trayecto():
 
             print(f"\n🏁 Trayecto finalizado. Tarifa total: {formato_moneda(total)}.")
             historial_trayectos.append(total)
+            guardar_historial()
             logging.info(
                 f"🏁 Trayecto finalizado. Tarifa total: {total:.2f}€"
             )  # 📌 Se registra la tarifa final en el log
@@ -96,8 +119,9 @@ def mostrar_historial():
         print("Historial de trayectos:")
         for i, total in enumerate(historial_trayectos, start=1):
             print(f"Trayecto {i}: {formato_moneda(total)}.")
-            logging.info(f"ℹ️ Historial consultado: {len(historial_trayectos)} trayectos registrados.")
-        
+            logging.info(
+                f"ℹ️ Historial consultado: {len(historial_trayectos)} trayectos registrados."
+            )
 
 
 def main():
