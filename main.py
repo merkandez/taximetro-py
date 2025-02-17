@@ -55,14 +55,7 @@ def iniciar_trayecto():
         segundos = tiempo_actual - tiempo_inicio  # Calcula el tiempo transcurrido en el estado anterior
 
         if accion in ["m", "p"]:
-            try:
-                segundos = int(input("⌚ Ingresa el tiempo transcurrido en segundos: "))
-                if segundos < 0:
-                    print("⛔ El tiempo no puede ser negativo.")
-                    continue
-            except ValueError:
-                print("⛔ Debes ingresar un número entero válido.")
-                continue
+          
 
             total += calcular_tarifa(segundos, en_movimiento)
             en_movimiento = accion == "m"
