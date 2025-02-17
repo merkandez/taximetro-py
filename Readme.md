@@ -1,229 +1,122 @@
-# 🏗 1. Estructura del Código
+# 🚕 Taxímetro Digital con Tiempo Automático en Python  
 
-En este proyecto de taxímetro básico, hemos organizado el código en funciones para que sea modular, fácil de leer y reutilizable. Aquí están las principales secciones:
-
-1️⃣ `mostrar_bienvenida()` → Muestra un mensaje de introducción.  
-2️⃣ `iniciar_trayecto()` → Maneja la lógica de un trayecto (inicio, cálculo de tarifa y finalización).  
-3️⃣ `main()` → Función principal que gestiona el flujo del programa.  
-4️⃣ `if __name__ == "__main__":` → Punto de entrada del script.
-
-Ahora vamos a analizar cada parte en detalle. 🔍
+## 📌 Descripción  
+Este proyecto es una versión mejorada de nuestro taxímetro digital, ahora con **medición automática del tiempo** usando la librería estándar `time` en Python.  
+En versiones anteriores, el usuario debía ingresar manualmente el tiempo transcurrido, pero ahora el programa mide **de manera precisa el tiempo real** en cada estado (movimiento o detenido), simulando mejor un taxímetro real.  
 
 ---
 
-## 📌 2. Función `mostrar_bienvenida()`
-
-```
-def mostrar_bienvenida():
-    """Muestra un mensaje de bienvenida y explica el funcionamiento del taxímetro."""
-    print("\n🚖 Bienvenido al Taxímetro Digital 🚖")
-    print("Este programa calcula la tarifa de un trayecto en función del tiempo.")
-    print("🔹 2 céntimos por segundo cuando está detenido.")
-    print("🔹 5 céntimos por segundo cuando está en movimiento.")
-    print("¡Comencemos!\n")
-```
-
-### 🔎 Conceptos Claves
-
-- **✅ Definición de una función**  
-  Se usa `def nombre_funcion():` para definir una función en Python.  
-  `"mostrar_bienvenida"` es un nombre descriptivo que indica claramente su propósito.
-
-- **✅ Cadenas de texto (`str`) y `print()`**
-
-  - `print()` muestra información en la terminal.
-  - `\n` (salto de línea) ayuda a mejorar la presentación visual.
-
-- **✅ Docstrings (`"""Comentario"""`)**  
-  Son comentarios de varias líneas que explican qué hace la función.  
-  Se usan `""" """` y se colocan justo debajo de la definición de la función.
+## 🔄 **Cambios Introducidos**
+1️⃣ **Se eliminó la entrada manual de segundos** → Antes, el usuario tenía que escribir cuántos segundos pasaban en cada estado.  
+2️⃣ **Se implementó `time.time()` para medir el tiempo real** → Ahora, el programa **captura automáticamente** el tiempo cuando el taxi está en movimiento o detenido.  
+3️⃣ **Se mejoró la precisión del cálculo de tarifas** → Ya no depende de la entrada del usuario, sino del tiempo exacto transcurrido.  
+4️⃣ **El programa es más intuitivo** → Solo hay que indicar si el taxi está **en movimiento o detenido**, y el sistema calculará la tarifa sin intervención manual.  
 
 ---
 
-## 📌 3. Función `formato_moneda()`
-
-### 💰 Formateo Correcto de Moneda (Céntimos y Euros)
-
-Para hacer que la presentación de la tarifa sea más clara, hemos implementado una función que muestra correctamente los importes en **céntimos o euros** dependiendo del valor:
-
-🔹 **Si el total es menor de 1.00**, se muestra en **céntimos**:
-
+## 🛠 **Explicación del Código y de los Cambios**
+### 🔹 **1. Importación de la Librería `time`**
 ```python
-0.75 → "75 céntimos"
-0.20 → "20 céntimos"
+import time
+```
+`time` es una librería estándar de Python que permite medir el tiempo en segundos desde el **1 de enero de 1970** (timestamp).  
 
+🔹 **En este proyecto, usamos `time.time()` para capturar el tiempo en cada cambio de estado.**  
+
+---
+
+### 🔹 **2. Eliminación de la Entrada Manual de Segundos**
+📌 **Antes (Método Manual)**  
+```python
+segundos = int(input("⌚ Ingresa el tiempo transcurrido en segundos: "))
+```
+🚨 **Problema**: El usuario tenía que escribir el tiempo transcurrido, lo que no era realista ni preciso.
+
+📌 **Ahora (Método Automático con `time`)**  
+```python
+tiempo_actual = time.time()
+segundos = tiempo_actual - tiempo_inicio
+```
+✅ **Solución**:  
+- `time.time()` **captura automáticamente** el tiempo en segundos.  
+- `segundos = tiempo_actual - tiempo_inicio` calcula el tiempo transcurrido.  
+- **El usuario ya no tiene que ingresar nada manualmente.**  
+
+---
+
+### 🔹 **3. Cálculo Automático del Tiempo y Tarifa**
+📌 **Antes**:
+```python
+total += calcular_tarifa(segundos, en_movimiento)
+```
+Aquí, `segundos` era un número ingresado manualmente por el usuario.  
+
+📌 **Ahora**:
+```python
+total += calcular_tarifa(segundos, en_movimiento)
+tiempo_inicio = time.time()  # Reinicia el temporizador después de cada acción
+```
+✅ **Diferencia**:
+- **Ahora `segundos` se calcula en base al tiempo real**.
+- **Cada vez que el usuario cambia de estado (`m` o `p`), el temporizador se reinicia**.
+
+---
+
+### 🔹 **4. Mejor Gestión del Formato de Moneda**
+📌 **Antes**:
+- El total se mostraba siempre en euros, sin importar si era menor a 1€.
+
+📌 **Ahora**:
+```python
+def formato_moneda(total):
+    if total < 1:
+        return f"{total * 100:.0f} céntimos"
+    else:
+        return f"{total:.2f}€"
+```
+✅ **Mejora**:
+- Si la tarifa es **menor de 1€**, se muestra en céntimos (`50 céntimos` en vez de `0.50€`).
+- Si es **mayor o igual a 1€**, se muestra con dos decimales (`1.25€`).
+
+---
+
+## 🎯 **Flujo de Funcionamiento**
+1️⃣ **El usuario inicia un trayecto** con `m` (moverse) o `p` (parar).  
+2️⃣ **El programa captura automáticamente el tiempo** que el taxi pasa en cada estado.  
+3️⃣ **Se calcula la tarifa en función del tiempo real transcurrido**.  
+4️⃣ **Cuando el usuario finaliza (`f`)**, se muestra el costo total del trayecto.  
+5️⃣ **El historial de trayectos se guarda** para futuras consultas.  
+
+---
+
+## 🖥 **Ejemplo de Uso**
+```
+🛑 Trayecto iniciado. Escribe 'm' para moverte, 'p' para pararte, 'f' para finalizar.
+Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): m
+(Después de 5 segundos...)
+🚕 Trayecto en movimiento. Tarifa acumulada: 25 céntimos.
+Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): p
+(Después de 3 segundos...)
+🚕 Trayecto detenido. Tarifa acumulada: 31 céntimos.
+Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): f
+
+🏁 Trayecto finalizado. Tarifa total: 31 céntimos.
 ```
 
 ---
 
-## 📌 4. Función `iniciar_trayecto()`
-
-Esta es la parte más importante del código, ya que maneja la lógica del taxímetro. Vamos a desglosarla paso a paso.
-
-### 🔹 Declaración de la Función y Variables Iniciales
-
-```
-def iniciar_trayecto():
-    """Inicia un trayecto y permite al usuario ingresar manualmente el tiempo transcurrido."""
-    total = 0
-    en_movimiento = False
-    print("Trayecto iniciado. Escribe 'm' para moverte, 'p' para parar, 'f' para finalizar.")
-```
-
-#### ✅ Variables Globales de la Función
-
-- `total = 0` → Acumula el costo del trayecto.
-- `en_movimiento = False` → Indica si el taxi está en movimiento o detenido.
+## 🚀 **Beneficios de esta Versión**
+✔ **Mayor precisión** → El tiempo se mide en segundos reales, sin depender del usuario.  
+✔ **Más intuitivo** → Solo se indican los cambios de estado, sin necesidad de escribir números.  
+✔ **Flujo de uso más realista** → Simula un taxímetro de verdad.  
+✔ **Código más limpio y fácil de entender** → Sin entradas manuales innecesarias.  
 
 ---
 
-### 🔹 Bucle `while True` para Mantener el Programa Activo
+## 📌 **Conclusión**
+- **Este proyecto demuestra cómo `time` puede mejorar la funcionalidad de un programa** sin necesidad de cambios complejos.  
+- **Nos permite entender cómo medir el tiempo y cómo estructurar un programa de manera modular**.  
+- **Además, este código sigue siendo una excelente base para futuras mejoras** (como integrar GPS o aplicar tarifas dinámicas).  
 
-```
-while True:
-    accion = input("🚗 Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): ").strip().lower()
-```
+👨‍💻 **¡Prueba el código y experimenta con los cambios!** 🚕💨
 
-#### ✅ Bucle Infinito (`while True`)
-
-Mantiene el programa en ejecución hasta que el usuario decida finalizar.
-
-#### ✅ `input()`
-
-Permite al usuario ingresar comandos (`'m'`, `'p'`, `'f'`).  
-`.strip().lower()` → Limpia espacios en blanco y convierte a minúsculas para evitar errores por formato.
-
----
-
-### 🔹 Validación del Tiempo Ingresado
-
-```
-if accion in ['m', 'p']:
-    try:
-        segundos = int(input("⏳ Ingresa el tiempo transcurrido en segundos: "))
-        if segundos < 0:
-            print("⚠️ El tiempo no puede ser negativo.")
-            continue
-    except ValueError:
-        print("⚠️ Debes ingresar un número entero válido.")
-        continue
-```
-
-#### ✅ Uso de `if` para Filtrar Opciones
-
-Si el usuario escribe `'m'` o `'p'`, el programa pide el tiempo transcurrido.
-
-#### ✅ Manejo de Errores con `try-except`
-
-- `int(input())` convierte el tiempo ingresado en número entero.
-- Si el usuario escribe texto en lugar de un número, `except ValueError:` evita que el programa crashee.
-
-#### ✅ Validación de Datos
-
-- `if segundos < 0:` → Evita tiempos negativos.
-- `continue` → Vuelve a pedir los datos si hay un error.
-
----
-
-### 🔹 Cálculo de la Tarifa
-
-```
-tarifa = 0.05 if accion == 'm' else 0.02
-total += segundos * tarifa
-en_movimiento = (accion == 'm')
-
-estado = "en movimiento" if en_movimiento else "detenido"
-print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
-```
-
-#### ✅ Operador Ternario (`if-else` en una línea)
-
-```
-tarifa = 0.05 if accion == 'm' else 0.02
-```
-
-- Si el taxi está en movimiento (`'m'`), la tarifa es **0.05**.
-- Si está detenido (`'p'`), la tarifa es **0.02**.
-
-#### ✅ Cálculo del Costo
-
-```
-total += segundos * tarifa
-```
-
-Multiplica el tiempo ingresado por la tarifa y acumula el resultado en `total`.
-
-#### ✅ Uso de f-strings
-
-```
-print(f"➡️ Taxi {estado}. Total: {total:.2f}€")
-```
-
-- `f"Texto {variable}"` permite incluir variables dentro de una cadena.
-- `{total:.2f}` → Formatea el número con dos decimales.
-
----
-
-### 🔹 Finalizar el Trayecto
-
-```
-elif accion == 'f':
-    print(f"\n🔚 Trayecto finalizado. Tarifa total: {total:.2f}€\n")
-    break
-```
-
-#### ✅ Detener el Bucle con `break`
-
-Cuando el usuario ingresa `'f'`, el programa muestra el total y sale del bucle.
-
----
-
-## 📌 4. Función `main()`
-
-```
-def main():
-    """Función principal del programa."""
-    mostrar_bienvenida()
-
-    while True:
-        iniciar_trayecto()
-        reiniciar = input("¿Deseas iniciar otro trayecto? (s/n): ").strip().lower()
-        if reiniciar != 's':
-            print("\n👋 Gracias por usar el Taxímetro Digital. ¡Hasta la próxima!\n")
-            break
-```
-
-### ✅ Maneja el Flujo del Programa
-
-1. Primero muestra la bienvenida.
-2. Luego entra en un bucle infinito, permitiendo iniciar nuevos trayectos.
-3. Si el usuario no quiere otro trayecto, el programa se cierra.
-
----
-
-## 📌 5. Punto de Entrada del Programa
-
-```
-if __name__ == "__main__":
-    main()
-```
-
-### ✅ Buenas Prácticas
-
-- Evita que el código se ejecute al importarlo en otro archivo.
-- Es una buena práctica para hacer código reutilizable en otros programas.
-
----
-
-# 🎯 Resumen Final
-
-✔ **Funciones** → Organizan el código en bloques reutilizables.  
-✔ **Bucle `while True`** → Mantiene el programa corriendo hasta que el usuario lo detenga.  
-✔ **if-elif** → Toman decisiones basadas en la entrada del usuario.  
-✔ **try-except** → Maneja errores de entrada para evitar fallos.  
-✔ **f-strings** → Formatean cadenas de manera clara y eficiente.  
-✔ **Buena Práctica: `if __name__ == "__main__"`** → Define el punto de entrada del script.
-
-```
-
-```
