@@ -1,4 +1,8 @@
-# 📌 Taxímetro Digital en Python - Proyecto Introductorio
+# 📌 Taxímetro Digital con Tiempo Automático en Python
+
+
+import time  # Importamos la librería para medir el tiempo automáticamente
+
 TARIFA_MOVIMIENTO = 0.05
 TARIFA_PARADO = 0.02
 
@@ -38,12 +42,17 @@ def iniciar_trayecto():
         "\n🛑 Trayecto iniciado. Escribe 'm' para moverte, 'p' para pararte, 'f' para finalizar."
     )
 
+    tiempo_inicio = time.time()  # Registra el tiempo al inicio del trayecto
+
     while True:
         accion = (
             input("Escribe 'm' (moverse), 'p' (parar) o 'f' (finalizar): ")
             .strip()
             .lower()
         )
+
+        tiempo_actual = time.time()  # Registra el tiempo al momento de cambiar de estado
+        segundos = tiempo_actual - tiempo_inicio  # Calcula el tiempo transcurrido en el estado anterior
 
         if accion in ["m", "p"]:
             try:
@@ -60,6 +69,9 @@ def iniciar_trayecto():
             estado = "en movimiento" if en_movimiento else "detenido"
 
             print(f"🚕 Trayecto {estado}. Tarifa acumulada: {formato_moneda(total)}.")
+
+            # Reiniciamos el temporizador para el siguiente estado
+            tiempo_inicio = time.time()
 
         elif accion == "f":
 
