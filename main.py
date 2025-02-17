@@ -8,6 +8,7 @@ logging.basicConfig(
     filename="taximetro.log",  # Archivo donde se guardarán los logs
     level=logging.INFO,  # Nivel de registro: INFO (guarda eventos clave)
     format="%(asctime)s - %(message)s",  # Formato del mensaje de log
+   # filemode="w" # Esto hace que el archivo se sobrescriba en cada ejecución
 )
 
 TARIFA_MOVIMIENTO = 0.05
