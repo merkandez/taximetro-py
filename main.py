@@ -1,7 +1,14 @@
-# 📌 Taxímetro Digital con Tiempo Automático en Python
+# 📌 Taxímetro Digital con Tiempo Automático en Python y funcionalidad de registro de logs
 
+import time
+import logging  # Importamos logging para registrar eventos en un archivo
 
-import time  # Importamos la librería para medir el tiempo automáticamente
+# Configuración del sistema de logs
+logging.basicConfig(
+    filename="taximetro.log",  # Archivo donde se guardarán los logs
+    level=logging.INFO,  # Nivel de registro: INFO (guarda eventos clave)
+    format="%(asctime)s - %(message)s",  # Formato del mensaje de log
+)
 
 TARIFA_MOVIMIENTO = 0.05
 TARIFA_PARADO = 0.02
@@ -29,20 +36,21 @@ def calcular_tarifa(segundos, en_movimiento):
 def formato_moneda(total):
     """Formatea el total para mostrarlo en céntimos si es menor de 1 euro, o en euros si es 1 o más."""
     if total < 1:
-        return f"{total * 100:.0f} céntimos"  # Multiplicamos por 100 y eliminamos decimales
+        return f"{total * 100:.0f} céntimos"
     else:
-        return f"{total:.2f}€"  # Muestra en formato euros con dos decimales
+        return f"{total:.2f}€"
 
 
 def iniciar_trayecto():
     """Inicia un trayecto y permite al usuario ingresar manualmente el tiempo transcurrido."""
     total = 0
+    logging.info("🚕 Trayecto iniciado.")  # 📌 Se registra el inicio del trayecto
     en_movimiento = False
     print(
         "\n🛑 Trayecto iniciado. Escribe 'm' para moverte, 'p' para pararte, 'f' para finalizar."
     )
 
-    tiempo_inicio = time.time()  # Registra el tiempo al inicio del trayecto
+    tiempo_inicio = time.time()
 
     while True:
         accion = (
@@ -51,25 +59,27 @@ def iniciar_trayecto():
             .lower()
         )
 
-        tiempo_actual = time.time()  # Registra el tiempo al momento de cambiar de estado
-        segundos = tiempo_actual - tiempo_inicio  # Calcula el tiempo transcurrido en el estado anterior
+        tiempo_actual = time.time()
+        segundos = tiempo_actual - tiempo_inicio
 
         if accion in ["m", "p"]:
-          
 
             total += calcular_tarifa(segundos, en_movimiento)
             en_movimiento = accion == "m"
             estado = "en movimiento" if en_movimiento else "detenido"
 
+            logging.info(f"➡️ Cambio de estado: {estado} ({segundos:.2f} segundos) - Tarifa acumulada: {total:.2f}€")
             print(f"🚕 Trayecto {estado}. Tarifa acumulada: {formato_moneda(total)}.")
 
-            # Reiniciamos el temporizador para el siguiente estado
             tiempo_inicio = time.time()
 
         elif accion == "f":
 
             print(f"\n🏁 Trayecto finalizado. Tarifa total: {formato_moneda(total)}.")
             historial_trayectos.append(total)
+            logging.info(
+                f"🏁 Trayecto finalizado. Tarifa total: {total:.2f}€"
+            )  # 📌 Se registra la tarifa final en el log
             break
         else:
             print("⛔ Debes escribir 'm' (moverse), 'p' (parar) o 'f' (finalizar).")
@@ -80,11 +90,13 @@ def mostrar_historial():
     print("\n📜 Historial de trayectos:")
     if not historial_trayectos:
         print("No hay trayectos registrados aún en el historial.")
+        logging.info("ℹ️ Historial consultado: No hay trayectos registrados.")
     else:
         print("Historial de trayectos:")
         for i, total in enumerate(historial_trayectos, start=1):
             print(f"Trayecto {i}: {formato_moneda(total)}.")
-        print()
+            logging.info(f"ℹ️ Historial consultado: {len(historial_trayectos)} trayectos registrados.")
+        
 
 
 def main():
